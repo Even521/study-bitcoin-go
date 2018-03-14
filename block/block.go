@@ -14,12 +14,18 @@ type Block struct {
 	Data          []byte //交易数据
 	PrevBlockHash []byte //存储前一个区块的Hase值
 	Timestamp     int64  //生成区块的时间
+	Nonce         int    //工作量证明算法的计数器
 }
 
 //生成一个新的区块方法
 func NewBlock(data string, prevBlockHash []byte) *Block{
-	block := &Block{Timestamp:time.Now().Unix(), Data:[]byte(data), PrevBlockHash:prevBlockHash, Hash:[]byte{}}
+	block := &Block{Timestamp:time.Now().Unix(), Data:[]byte(data), PrevBlockHash:prevBlockHash, Hash:[]byte{},Nonce:0}
 	block.SetHash()
+	//工作证明
+	pow :=NewProofOfWork(block)
+	nonce, hash := pow.Run()
+	block.Hash = hash[:]
+	block.Nonce = nonce
 	return block
 }
 
@@ -31,7 +37,12 @@ func (b *Block) SetHash() {
 	b.Hash = hash[:]
 }
 
+func (i *Block) Validate() bool {
+    return NewProofOfWork(i).Validate()
+}
+
 //创世块方法
 func  NewGenesisBlock() *Block {
 	return NewBlock("Genesis Block", []byte{})
 }
+
