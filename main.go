@@ -1,12 +1,10 @@
 package main
 
 import (
-"fmt"
-
-
+    "fmt"
 	"strconv"
 	"github.com/study-bitcion-go/block"
-	"crypto"
+
 )
 
 
@@ -25,6 +23,7 @@ func main() {
 		fmt.Printf("Data: %s\n", block.Data)
 		fmt.Printf("Hash: %x\n", block.Hash)
 		fmt.Printf("Nonce: %d\n",block.Nonce)
+		//校验数据
 		fmt.Printf("PoW: %s\n", strconv.FormatBool(block.Validate()))
 		fmt.Println()
 

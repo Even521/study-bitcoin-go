@@ -16,8 +16,8 @@ const targetBits = 20
 
 //工作量证明
 type ProofOfWork struct {
-	block  *Block
-	target *big.Int
+	block  *Block //区块体
+	target *big.Int //挖矿目标值
 }
 
 // 新的工作量证明，并且得到一个难度值
