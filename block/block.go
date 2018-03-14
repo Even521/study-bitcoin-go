@@ -37,6 +37,7 @@ func (b *Block) SetHash() {
 	b.Hash = hash[:]
 }
 
+//区块校验
 func (i *Block) Validate() bool {
     return NewProofOfWork(i).Validate()
 }
