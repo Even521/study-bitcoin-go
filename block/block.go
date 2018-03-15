@@ -3,6 +3,9 @@ package block
 
 import (
 	"time"
+	"bytes"
+	"encoding/gob"
+	"log"
 )
 
 //区块结构
@@ -12,6 +15,29 @@ type Block struct {
 	PrevBlockHash []byte //存储前一个区块的Hase值
 	Timestamp     int64  //生成区块的时间
 	Nonce         int    //工作量证明算法的计数器
+}
+
+//序列化Block
+func (b *Block) Serialize() []byte  {
+	var result bytes.Buffer
+	encoder := gob.NewEncoder(&result)
+	err := encoder.Encode(b)
+	if err != nil {
+		log.Panic(err)
+	}
+	return result.Bytes()
+}
+//反序列化
+func DeserializeBlock(d []byte) *Block {
+	var block Block
+
+	decoder := gob.NewDecoder(bytes.NewReader(d))
+	err := decoder.Decode(&block)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	return &block
 }
 
 //生成一个新的区块方法
