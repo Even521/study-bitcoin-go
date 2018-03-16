@@ -7,12 +7,6 @@ import (
 )
 
 
-
-
-
-
-
-
 //int转成[]byte
 func IntToHex(num int64) []byte {
 	buff := new(bytes.Buffer)
