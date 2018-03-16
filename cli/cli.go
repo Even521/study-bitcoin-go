@@ -16,6 +16,7 @@ type CLI struct {
 func Start(bc *block.Blockchain)interface{}  {
 	cl := CLI{bc}
 	cl.run()//执行命令方法
+
 	return  nil
 }
 

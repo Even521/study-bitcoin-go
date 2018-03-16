@@ -9,6 +9,6 @@ import (
 
 func main() {
 	bc := block.NewBlockchain()
-    block.Close(bc)
+	defer block.Close(bc)
     cli.Start(bc)
 }

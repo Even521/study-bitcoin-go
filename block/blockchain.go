@@ -6,8 +6,8 @@ import (
 	"fmt"
 )
 
-const dbFile  ="blockchian.db" //定义数据文件名
-const blocksBucket="blocks_"//区块桶
+const dbFile  ="db/blockchian.db" //定义数据文件名
+const blocksBucket="blocks"//区块桶
 
 // 区块链保持一个序列化
 type Blockchain struct {
@@ -23,9 +23,9 @@ type BlockchainIterator struct {
 func (bc *Blockchain) AddBlock(data string)  {
 	var lastHash []byte //最后一个区块hash
 	//查询数据库中最后一块的hash
-	err :=bc.db.View(func(tx *bolt.Tx) error {
-		b :=tx.Bucket([]byte(blocksBucket))
-		lastHash=b.Get([]byte("1"))//最新的一块hash的key我们知道为"l"
+	err := bc.db.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(blocksBucket))
+		lastHash = b.Get([]byte("l"))
 		return nil
 	})
 
@@ -52,29 +52,23 @@ func (bc *Blockchain) AddBlock(data string)  {
 //迭代器
 func (bc *Blockchain) Iterator() *BlockchainIterator {
 	bci := &BlockchainIterator{bc.tip, bc.db}
-
 	return bci
 }
 
 // 迭代下一区块
 func (i *BlockchainIterator) Next() *Block {
 	var block *Block
-
 	err := i.db.View(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(blocksBucket))
-		//查询区块
 		encodedBlock := b.Get(i.currentHash)
 		block = DeserializeBlock(encodedBlock)
 
 		return nil
 	})
-
 	if err != nil {
 		log.Panic(err)
 	}
-    //将前一个区块
 	i.currentHash = block.PrevBlockHash
-
 	return block
 }
 //关闭方法
@@ -92,21 +86,17 @@ func NewBlockchain() *Blockchain {
 	}
 	err = db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(blocksBucket))
-
 		if b == nil {
 			fmt.Println("No existing blockchain found. Creating a new one...")
 			genesis := NewGenesisBlock()
-
 			b, err := tx.CreateBucket([]byte(blocksBucket))
 			if err != nil {
 				log.Panic(err)
 			}
-
 			err = b.Put(genesis.Hash, genesis.Serialize())
 			if err != nil {
 				log.Panic(err)
 			}
-
 			err = b.Put([]byte("l"), genesis.Hash)
 			if err != nil {
 				log.Panic(err)
@@ -115,16 +105,12 @@ func NewBlockchain() *Blockchain {
 		} else {
 			tip = b.Get([]byte("l"))
 		}
-
 		return nil
 	})
-
 	if err != nil {
 		log.Panic(err)
 	}
-
 	bc := Blockchain{tip, db}
-
 	return &bc
 }
 
