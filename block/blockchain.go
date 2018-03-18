@@ -8,6 +8,8 @@ import (
 
 const dbFile  ="db/blockchian.db" //定义数据文件名
 const blocksBucket="blocks"//区块桶
+//创世块data
+const genesisCoinbaseData = "The Times 03/Jan/2009 Chancellor on brink of second bailout for banks"
 
 // 区块链保持一个序列化
 type Blockchain struct {
