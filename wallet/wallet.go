@@ -6,6 +6,8 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"log"
+	"github.com/study-bitcion-go/utils"
+	"crypto/rand"
 )
 
 const version = byte(0x00)  //16进制0
@@ -34,7 +36,7 @@ func (w Wallet) GetAddress() []byte {
 	checksum := checksum(versionedPayload)
 
 	fullPayload := append(versionedPayload, checksum...)
-	address := Base58Encode(fullPayload)
+	address := utils.Base58Encode(fullPayload)
 
 	return address
 }
@@ -53,9 +55,9 @@ func HashPubKey(pubKey []byte) []byte {
 	return publicRIPEMD160
 }
 
-// ValidateAddress check if address if valid
+// 校验地址
 func ValidateAddress(address string) bool {
-	pubKeyHash := Base58Decode([]byte(address))
+	pubKeyHash := utils.Base58Decode([]byte(address))
 	actualChecksum := pubKeyHash[len(pubKeyHash)-addressChecksumLen:]
 	version := pubKeyHash[0]
 	pubKeyHash = pubKeyHash[1 : len(pubKeyHash)-addressChecksumLen]
@@ -64,7 +66,7 @@ func ValidateAddress(address string) bool {
 	return bytes.Compare(actualChecksum, targetChecksum) == 0
 }
 
-// Checksum generates a checksum for a public key
+// 校验和为一个公钥生成一个校验和
 func checksum(payload []byte) []byte {
 	firstSHA := sha256.Sum256(payload)
 	secondSHA := sha256.Sum256(firstSHA[:])
