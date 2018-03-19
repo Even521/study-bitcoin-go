@@ -62,7 +62,7 @@ func (bc *Blockchain) FindUnspentTransactions(address string) []Transaction {
 
 	for {
 		block := bci.Next()
-		for _, tx := range block.Transactions {
+		for _,tx := range block.Transactions {
 			txID := hex.EncodeToString(tx.ID)  //交易ID转换成string
 		Outputs:
 			for outIdx, out := range tx.Vout {
