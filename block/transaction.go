@@ -1,4 +1,4 @@
-package trade
+package block
 
 import (
 	"encoding/gob"
@@ -6,7 +6,6 @@ import (
 	"crypto/sha256"
 	"bytes"
 	"fmt"
-	"github.com/study-bitcion-go/block"
 	"encoding/hex"
 )
 
@@ -27,12 +26,13 @@ type TXInput struct {
 }
 //一个事物输出
 type TXOutput struct {
-	Value int
-	ScriptPubkey string
+	Value int       //值
+	ScriptPubKey string //解锁脚本key
 }
 
 
-func (tx *Transaction)IsCoinbase()bool  {
+
+func (tx *Transaction)IsCoinbase()   bool  {
     return len(tx.Vin)==1&&len(tx.Vin[0].Txid)==0&&tx.Vin[0].Vout==-1
 }
 //设置交易ID hash
@@ -63,8 +63,16 @@ func NewCoinbaseTX(to,data string) *Transaction  {
 	return &tx
 
 }
+//通过检查地址是否启动了事务
+func (in *TXInput) CanUnlockOutputWith(unlockingData string) bool {
+	return in.ScriptSig == unlockingData
+}
+//检查输出是否可以使用所提供的数据进行解锁
+func (out *TXOutput) CanBeUnlockedWith(unlockingData string) bool {
+	return out.ScriptPubKey == unlockingData
+}
 
-func NewUTXOTransaction(from, to string, amount int, bc *block.Blockchain)  *Transaction{
+func NewUTXOTransaction(from, to string, amount int, bc *Blockchain)   *Transaction{
 	var inputs []TXInput
 	var outputs []TXOutput
 
