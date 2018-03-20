@@ -3,8 +3,8 @@ package cli
 import (
 	"log"
 	"fmt"
-	"github.com/study-bitcion-go/wallet"
-	"github.com/study-bitcion-go/block"
+	"github.com/study-bitcoin-go/wallet"
+	"github.com/study-bitcoin-go/block"
 )
 
 func (cli *CLI) send(from, to string, amount int) {

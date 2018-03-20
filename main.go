@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/study-bitcion-go/cli"
+	"github.com/study-bitcoin-go/cli"
 )
 
 

@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"github.com/study-bitcion-go/wallet"
+	"github.com/study-bitcoin-go/wallet"
 	"fmt"
 )
 

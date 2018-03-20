@@ -3,7 +3,7 @@ package cli
 import (
 	"fmt"
 	"strconv"
-	"github.com/study-bitcion-go/block"
+	"github.com/study-bitcoin-go/block"
 )
 
 func (cli *CLI) printChain() {

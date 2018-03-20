@@ -13,7 +13,7 @@ import (
 	"math/big"
 	"crypto/rand"
 
-	wallet2 "github.com/study-bitcion-go/wallet"
+	wallet2 "github.com/study-bitcoin-go/wallet"
 )
 
 const subsidy  = 10 //初始化补助为10

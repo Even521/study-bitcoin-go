@@ -4,8 +4,8 @@ import (
 	"log"
 	"fmt"
 
-	"github.com/study-bitcion-go/wallet"
-	"github.com/study-bitcion-go/block"
+	"github.com/study-bitcoin-go/wallet"
+	"github.com/study-bitcoin-go/block"
 )
 //创建一个区块链
 func (cli *CLI) createBlockchain(address string) {

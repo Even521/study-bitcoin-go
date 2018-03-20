@@ -1,7 +1,7 @@
 package block
 
 import (
-	"github.com/study-bitcion-go/utils"
+	"github.com/study-bitcoin-go/utils"
 	"bytes"
 )
 

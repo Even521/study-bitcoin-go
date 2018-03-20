@@ -3,9 +3,9 @@ package cli
 import (
 	"log"
 	"fmt"
-	"github.com/study-bitcion-go/wallet"
-	"github.com/study-bitcion-go/block"
-	"github.com/study-bitcion-go/utils"
+	"github.com/study-bitcoin-go/wallet"
+	"github.com/study-bitcoin-go/block"
+	"github.com/study-bitcoin-go/utils"
 )
 
 func (cli *CLI) getBalance(address string) {
