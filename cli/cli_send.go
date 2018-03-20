@@ -3,8 +3,8 @@ package cli
 import (
 	"log"
 	"fmt"
-	"github.com/study-bitcion-go/wallet"
-	"github.com/study-bitcion-go/block"
+	"github.com/study-bitcoin-go/wallet"
+	"github.com/study-bitcoin-go/block"
 )
 
 func (cli *CLI) send(from, to string, amount int) {
@@ -15,10 +15,15 @@ func (cli *CLI) send(from, to string, amount int) {
 		log.Panic("ERROR: Recipient address is not valid")
 	}
 
-	bc := block.NewBlockchain(from)
+	bc := block.NewBlockchain()
+	UTXOSet := block.UTXOSet{bc}
 	defer block.Close(bc)
 
-	tx := block.NewUTXOTransaction(from, to, amount, bc)
-	bc.MineBlock([]*block.Transaction{tx})
+	tx := block.NewUTXOTransaction(from, to, amount, &UTXOSet)
+	cbTx := block.NewCoinbaseTX(from, "")
+	txs := [] *block.Transaction{cbTx, tx}
+
+	newBlock :=bc.MineBlock(txs)
+	UTXOSet.Update(newBlock)
 	fmt.Println("Success!")
 }

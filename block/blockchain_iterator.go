@@ -18,10 +18,8 @@ func (i *BlockchainIterator) Next() *Block {
 		b := tx.Bucket([]byte(blocksBucket))
 		encodedBlock := b.Get(i.currentHash)
 		block = DeserializeBlock(encodedBlock)
-
 		return nil
 	})
-
 	if err != nil {
 		log.Panic(err)
 	}

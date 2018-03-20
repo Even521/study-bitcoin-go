@@ -3,7 +3,7 @@ package cli
 import (
 	"log"
 	"fmt"
-	"github.com/study-bitcion-go/wallet"
+	"github.com/study-bitcoin-go/wallet"
 )
 
 func (cli *CLI) listAddresses() {

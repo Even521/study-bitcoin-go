@@ -3,11 +3,11 @@ package cli
 import (
 	"fmt"
 	"strconv"
-	"github.com/study-bitcion-go/block"
+	"github.com/study-bitcoin-go/block"
 )
 
 func (cli *CLI) printChain() {
-	bc := block.NewBlockchain("")
+	bc := block.NewBlockchain()
 	defer block.Close(bc)
 
 	bci := bc.Iterator()

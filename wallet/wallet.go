@@ -6,9 +6,9 @@ import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
 	"log"
-	"github.com/study-bitcion-go/utils"
+	"github.com/study-bitcoin-go/utils"
 	"crypto/rand"
-	"github.com/study-bitcion-go/utils/ripemd160"
+	"github.com/study-bitcoin-go/utils/ripemd160"
 )
 
 const version = byte(0x00)  //16进制0

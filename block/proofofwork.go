@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"math"
 	"math/big"
-	"github.com/study-bitcion-go/utils"
+	"github.com/study-bitcoin-go/utils"
 )
 
 var (
@@ -56,15 +56,11 @@ func (pow *ProofOfWork) Run() (int, []byte) {
 
 	fmt.Printf(" Mining the block containing \"%s\"\n", pow.block.HashTransactions())
 	for nonce < maxNonce {
-
 		data := pow.prepareData(nonce)
-
 		hash = sha256.Sum256(data)
 		fmt.Printf("\r Dig into mine  %x", hash)
 		hashInt.SetBytes(hash[:])
-
 		if hashInt.Cmp(pow.target) == -1 {
-
 			break
 		} else {
 			nonce++

@@ -12,8 +12,7 @@ import (
 	"crypto/elliptic"
 	"math/big"
 	"crypto/rand"
-
-	wallet2 "github.com/study-bitcion-go/wallet"
+	"github.com/study-bitcoin-go/wallet"
 )
 
 const subsidy  = 10 //初始化补助为10
@@ -175,7 +174,13 @@ func (tx *Transaction) Verify(prevTXs map[string]Transaction) bool {
 // NewCoinbaseTX creates a new coinbase transaction
 func NewCoinbaseTX(to, data string) *Transaction {
 	if data == "" {
-		data = fmt.Sprintf("Reward to '%s'", to)
+		randData := make([]byte, 20)
+		_, err := rand.Read(randData)
+		if err != nil {
+			log.Panic(err)
+		}
+
+		data = fmt.Sprintf("%x", randData)
 	}
 
 	txin := TXInput{[]byte{}, -1, nil, []byte(data)}
@@ -187,17 +192,17 @@ func NewCoinbaseTX(to, data string) *Transaction {
 }
 
 // NewUTXOTransaction creates a new transaction
-func NewUTXOTransaction(from, to string, amount int, bc *Blockchain) *Transaction {
+func NewUTXOTransaction(from, to string, amount int, UTXOSet *UTXOSet) *Transaction {
 	var inputs []TXInput
 	var outputs []TXOutput
 
-	wallets, err := wallet2.NewWallets()
+	wallets, err := wallet.NewWallets()
 	if err != nil {
 		log.Panic(err)
 	}
-	wallet := wallets.GetWallet(from)
-	pubKeyHash := wallet2.HashPubKey(wallet.PublicKey)
-	acc, validOutputs := bc.FindSpendableOutputs(pubKeyHash, amount)
+	w := wallets.GetWallet(from)
+	pubKeyHash := wallet.HashPubKey(w.PublicKey)
+	acc, validOutputs := UTXOSet.FindSpendableOutputs(pubKeyHash, amount)
 
 	if acc < amount {
 		log.Panic("ERROR: Not enough funds")
@@ -211,7 +216,7 @@ func NewUTXOTransaction(from, to string, amount int, bc *Blockchain) *Transactio
 		}
 
 		for _, out := range outs {
-			input := TXInput{txID, out, nil, wallet.PublicKey}
+			input := TXInput{txID, out, nil, w.PublicKey}
 			inputs = append(inputs, input)
 		}
 	}
@@ -224,8 +229,7 @@ func NewUTXOTransaction(from, to string, amount int, bc *Blockchain) *Transactio
 
 	tx := Transaction{nil, inputs, outputs}
 	tx.ID = tx.Hash()
-	bc.SignTransaction(&tx, wallet.PrivateKey)
-
+	UTXOSet.Blockchain.SignTransaction(&tx, w.PrivateKey)
 	return &tx
 }
 

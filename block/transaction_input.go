@@ -2,7 +2,7 @@ package block
 
 import (
 	"bytes"
-	"github.com/study-bitcion-go/wallet"
+	"github.com/study-bitcoin-go/wallet"
 )
 
 //一个事物输入
