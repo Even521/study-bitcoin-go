@@ -8,6 +8,7 @@ import (
 	"log"
 	"github.com/study-bitcion-go/utils"
 	"crypto/rand"
+	"github.com/study-bitcion-go/utils/ripemd160"
 )
 
 const version = byte(0x00)  //16进制0
@@ -24,27 +25,22 @@ type Wallet struct {
 func NewWallet() *Wallet {
 	private, public := newKeyPair()
 	wallet := Wallet{private, public}
-
 	return &wallet
 }
 
 // 得到一个钱包地址
 func (w Wallet) GetAddress() []byte {
 	pubKeyHash := HashPubKey(w.PublicKey)
-
 	versionedPayload := append([]byte{version}, pubKeyHash...)
 	checksum := checksum(versionedPayload)
-
 	fullPayload := append(versionedPayload, checksum...)
 	address := utils.Base58Encode(fullPayload)
-
 	return address
 }
 
 // HashPubKey hashes public key
 func HashPubKey(pubKey []byte) []byte {
 	publicSHA256 := sha256.Sum256(pubKey)
-
 	RIPEMD160Hasher := ripemd160.New()
 	_, err := RIPEMD160Hasher.Write(publicSHA256[:])
 	if err != nil {
