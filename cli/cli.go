@@ -1,7 +1,7 @@
 package cli
 
 import (
-	"github.com/study-bitcion-go/block"
+	"github.com/study-bitcoin-go/block"
 	"fmt"
 	"os"
 	"strconv"
@@ -16,12 +16,15 @@ func (cli *CLI) createBlockchain(address string) {
     block.Close(bc)//关闭数据库
 	fmt.Println("Done!")
 }
+//查询余额
 func (cli *CLI) getBalance(address string) {
 	bc := block.NewBlockchain(address)
 	defer block.Close(bc)
 
 	balance := 0
+	//查询所有未经使用的交易地址
 	UTXOs := bc.FindUTXO(address)
+	//算出未使用的交易地址的value和
 	for _, out := range UTXOs {
 		balance += out.Value
 	}

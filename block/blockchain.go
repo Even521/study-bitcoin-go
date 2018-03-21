@@ -68,17 +68,21 @@ func (bc *Blockchain) FindUnspentTransactions(address string) []Transaction {
 			for outIdx, out := range tx.Vout {
 				// Was the output spent?
 				if spentTXOs[txID] != nil {
+					//检查一个输出是否已经在输入中被引用
 					for _, spentOut := range spentTXOs[txID] {
 						if spentOut == outIdx {
 							continue Outputs
 						}
 					}
 				}
-
+                //由于交易存储在块中，因此我们必须检查区块链中的每个块。我们从输出开始：
 				if out.CanBeUnlockedWith(address) {
 					unspentTXs = append(unspentTXs, *tx)
 				}
 			}
+
+			//我们跳过输入中引用的那些（它们的值被移到其他输出，因此我们不能计数它们）。
+			// 在检查输出之后，我们收集所有可能解锁输出的输入，并锁定提供的地址（这不适用于coinbase事务，因为它们不解锁输出）
 			if tx.IsCoinbase() == false {
 				for _, in := range tx.Vin {
 					if in.CanUnlockOutputWith(address) {
@@ -98,9 +102,12 @@ func (bc *Blockchain) FindUnspentTransactions(address string) []Transaction {
 //发现并返回所有未使用的事务输出
 func (bc *Blockchain) FindUTXO(address string) []TXOutput {
 	var UTXOs []TXOutput
+	//未使用输出的事务列表
 	unspentTransactions := bc.FindUnspentTransactions(address)
+	//查找
 	for _, tx := range unspentTransactions {
 		for _, out := range tx.Vout {
+			///检查输出是否可以使用所提供的数据进行解锁
 			if out.CanBeUnlockedWith(address) {
 				UTXOs = append(UTXOs, out)
 			}

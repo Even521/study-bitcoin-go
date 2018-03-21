@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"math"
 	"math/big"
-	"github.com/study-bitcion-go/utils"
+	"github.com/study-bitcoin-go/utils"
 )
 
 var (
@@ -44,7 +44,6 @@ func (pow *ProofOfWork) prepareData(nonce int) []byte {
 		},
 		[]byte{},
 	)
-
 	return data
 }
 

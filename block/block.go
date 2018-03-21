@@ -69,13 +69,13 @@ func NewBlock(transactions []*Transaction, prevBlockHash []byte) *Block{
 }
 
 
-//区块校验
-func (i *Block) Validate() bool {
-    return NewProofOfWork(i).Validate()
-}
 
 //创建并返回创世纪Block
 func  NewGenesisBlock(coinbase *Transaction) *Block {
 	return NewBlock([]*Transaction{coinbase}, []byte{})
 }
 
+//区块校验
+func (i *Block) Validate() bool {
+	return NewProofOfWork(i).Validate()
+}
