@@ -56,8 +56,9 @@ func (tx *Transaction) Hash() []byte {
 	return hash[:]
 }
 
-// Sign signs each input of a Transaction
+// 签名
 func (tx *Transaction) Sign(privKey ecdsa.PrivateKey, prevTXs map[string]Transaction) {
+	//判断是否是coinbase交易
 	if tx.IsCoinbase() {
 		return
 	}
@@ -87,7 +88,7 @@ func (tx *Transaction) Sign(privKey ecdsa.PrivateKey, prevTXs map[string]Transac
 	}
 }
 
-// String returns a human-readable representation of a transaction
+// 将交易转化成string数组
 func (tx Transaction) String() string {
 	var lines []string
 
@@ -111,12 +112,13 @@ func (tx Transaction) String() string {
 	return strings.Join(lines, "\n")
 }
 
-// TrimmedCopy creates a trimmed copy of Transaction to be used in signing
+// 创建一个副本用于签名
 func (tx *Transaction) TrimmedCopy() Transaction {
 	var inputs []TXInput
 	var outputs []TXOutput
 
 	for _, vin := range tx.Vin {
+		//该副本将包括所有的输入和输出，但TXInput.Signature并TXInput.PubKey设置为零
 		inputs = append(inputs, TXInput{vin.Txid, vin.Vout, nil, nil})
 	}
 
@@ -129,7 +131,7 @@ func (tx *Transaction) TrimmedCopy() Transaction {
 	return txCopy
 }
 
-// Verify verifies signatures of Transaction inputs
+// 验证方法
 func (tx *Transaction) Verify(prevTXs map[string]Transaction) bool {
 	if tx.IsCoinbase() {
 		return true

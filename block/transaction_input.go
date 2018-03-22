@@ -5,15 +5,15 @@ import (
 	"github.com/study-bitcoin-go/wallet"
 )
 
-//一个事物输入
+//输入事物
 type TXInput struct {
-	Txid      []byte
-	Vout      int
-	Signature []byte
-	PubKey    []byte
+	Txid      []byte //事物hash
+	Vout      int    //输出值
+	Signature []byte //签名
+	PubKey    []byte //公钥
 }
 
-// UsesKey checks whether the address initiated the transaction
+//检查输入是否使用特定的键来解锁输出
 func (in *TXInput) UsesKey(pubKeyHash []byte) bool {
 	lockingHash := wallet.HashPubKey(in.PubKey)
 
