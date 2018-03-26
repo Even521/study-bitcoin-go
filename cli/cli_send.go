@@ -15,9 +15,8 @@ func (cli *CLI) send(from, to string, amount int) {
 		log.Panic("ERROR: Recipient address is not valid")
 	}
     bc :=block.NewBlockchain()
-    if bc!=nil {
-		defer block.Close(bc)
-	}
+    defer block.Close(bc)
+
 	//bc := block.NewBlockchain()
 	UTXOSet := block.UTXOSet{bc}
 
