@@ -12,8 +12,10 @@ import (
 	"crypto/elliptic"
 	"math/big"
 	"crypto/rand"
-	"github.com/study-bitcoin-go/wallet"
+	 wallet2 "github.com/study-bitcoin-go/wallet"
 )
+
+
 
 const subsidy  = 10 //初始化补助为10
 
@@ -24,7 +26,6 @@ type Transaction struct {
 	Vin  []TXInput  //事物输入
 	Vout []TXOutput //事物输出
 }
-
 // IsCoinbase checks whether the transaction is coinbase
 func (tx Transaction) IsCoinbase() bool {
 	return len(tx.Vin) == 1 && len(tx.Vin[0].Txid) == 0 && tx.Vin[0].Vout == -1
@@ -196,12 +197,12 @@ func NewUTXOTransaction(from, to string, amount int, UTXOSet *UTXOSet) *Transact
 	var inputs []TXInput
 	var outputs []TXOutput
 
-	wallets, err := wallet.NewWallets()
+	wallets, err :=wallet2.NewWallets()
 	if err != nil {
 		log.Panic(err)
 	}
-	w := wallets.GetWallet(from)
-	pubKeyHash := wallet.HashPubKey(w.PublicKey)
+	wallet := wallets.GetWallet(from)
+	pubKeyHash := wallet2.HashPubKey(wallet.PublicKey)
 	acc, validOutputs := UTXOSet.FindSpendableOutputs(pubKeyHash, amount)
 
 	if acc < amount {
@@ -216,7 +217,7 @@ func NewUTXOTransaction(from, to string, amount int, UTXOSet *UTXOSet) *Transact
 		}
 
 		for _, out := range outs {
-			input := TXInput{txID, out, nil, w.PublicKey}
+			input := TXInput{txID, out, nil, wallet.PublicKey}
 			inputs = append(inputs, input)
 		}
 	}
@@ -229,8 +230,8 @@ func NewUTXOTransaction(from, to string, amount int, UTXOSet *UTXOSet) *Transact
 
 	tx := Transaction{nil, inputs, outputs}
 	tx.ID = tx.Hash()
-	UTXOSet.Blockchain.SignTransaction(&tx, w.PrivateKey)
+	UTXOSet.Blockchain.SignTransaction(&tx, wallet.PrivateKey)
+
 	return &tx
 }
-
 

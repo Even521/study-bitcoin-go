@@ -12,7 +12,7 @@ import (
 )
 
 const version = byte(0x00)  //16进制0
-const walletFile = "wallet.dat"
+const walletFile = "db/wallet.dat"
 const addressChecksumLen = 4
 
 // 钱包
@@ -21,26 +21,31 @@ type Wallet struct {
 	PublicKey  []byte //公钥
 }
 
-// 创建一个新钱包
+// NewWallet creates and returns a Wallet
 func NewWallet() *Wallet {
 	private, public := newKeyPair()
 	wallet := Wallet{private, public}
+
 	return &wallet
 }
 
-// 得到一个钱包地址
+// GetAddress returns wallet address
 func (w Wallet) GetAddress() []byte {
 	pubKeyHash := HashPubKey(w.PublicKey)
+
 	versionedPayload := append([]byte{version}, pubKeyHash...)
 	checksum := checksum(versionedPayload)
+
 	fullPayload := append(versionedPayload, checksum...)
 	address := utils.Base58Encode(fullPayload)
+
 	return address
 }
 
 // HashPubKey hashes public key
 func HashPubKey(pubKey []byte) []byte {
 	publicSHA256 := sha256.Sum256(pubKey)
+
 	RIPEMD160Hasher := ripemd160.New()
 	_, err := RIPEMD160Hasher.Write(publicSHA256[:])
 	if err != nil {
@@ -51,9 +56,9 @@ func HashPubKey(pubKey []byte) []byte {
 	return publicRIPEMD160
 }
 
-// 校验地址
+// ValidateAddress check if address if valid
 func ValidateAddress(address string) bool {
-	pubKeyHash := utils.Base58Decode([]byte(address))
+	pubKeyHash :=utils.Base58Decode([]byte(address))
 	actualChecksum := pubKeyHash[len(pubKeyHash)-addressChecksumLen:]
 	version := pubKeyHash[0]
 	pubKeyHash = pubKeyHash[1 : len(pubKeyHash)-addressChecksumLen]
@@ -62,7 +67,7 @@ func ValidateAddress(address string) bool {
 	return bytes.Compare(actualChecksum, targetChecksum) == 0
 }
 
-// 校验和为一个公钥生成一个校验和
+// Checksum generates a checksum for a public key
 func checksum(payload []byte) []byte {
 	firstSHA := sha256.Sum256(payload)
 	secondSHA := sha256.Sum256(firstSHA[:])

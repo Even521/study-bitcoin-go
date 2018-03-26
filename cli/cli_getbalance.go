@@ -12,8 +12,8 @@ func (cli *CLI) getBalance(address string) {
 	if !wallet.ValidateAddress(address) {
 		log.Panic("ERROR: Address is not valid")
 	}
-	bc :=block.NewBlockchain()
-	UTXOSet :=block.UTXOSet{bc}
+	bc := block.NewBlockchain()
+	UTXOSet := block.UTXOSet{bc}
 	defer block.Close(bc)
 
 	balance := 0
@@ -26,4 +26,6 @@ func (cli *CLI) getBalance(address string) {
 	}
 
 	fmt.Printf("Balance of '%s': %d\n", address, balance)
+
+
 }

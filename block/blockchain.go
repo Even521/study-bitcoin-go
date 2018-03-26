@@ -13,6 +13,7 @@ import (
 
 const dbFile  ="db/blockchian.db" //定义数据文件名
 const blocksBucket="blocks"//区块桶
+
 //创世块data
 const genesisCoinbaseData = "The Times 03/Jan/2009 Chancellor on brink of second bailout for banks"
 
@@ -83,6 +84,7 @@ func NewBlockchain() *Blockchain {
 	if err != nil {
 		log.Panic(err)
 	}
+
 	err = db.Update(func(tx *bolt.Tx) error {
 		b := tx.Bucket([]byte(blocksBucket))
 		tip = b.Get([]byte("l"))
@@ -97,7 +99,6 @@ func NewBlockchain() *Blockchain {
 
 	return &bc
 }
-
 
 // FindTransaction finds a transaction by its ID
 func (bc *Blockchain) FindTransaction(ID []byte) (Transaction, error) {
@@ -119,7 +120,6 @@ func (bc *Blockchain) FindTransaction(ID []byte) (Transaction, error) {
 
 	return Transaction{}, errors.New("Transaction is not found")
 }
-
 
 // FindUTXO finds all unspent transaction outputs and returns transactions with spent outputs removed
 func (bc *Blockchain) FindUTXO() map[string]TXOutputs {
@@ -164,12 +164,6 @@ func (bc *Blockchain) FindUTXO() map[string]TXOutputs {
 
 	return UTXO
 }
-
-
-
-
-
-
 
 // Iterator returns a BlockchainIterat
 func (bc *Blockchain) Iterator() *BlockchainIterator {
@@ -264,7 +258,5 @@ func dbExists() bool {
 
 	return true
 }
-
-
 
 

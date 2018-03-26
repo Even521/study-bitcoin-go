@@ -6,8 +6,8 @@ import (
 	"bytes"
 	"encoding/gob"
 	"log"
-	"crypto/sha256"
 
+	"github.com/study-bitcoin-go/utils/merkle"
 )
 
 //区块结构
@@ -43,14 +43,14 @@ func DeserializeBlock(d []byte) *Block {
 }
 //返回块状事务的hash
 func (b *Block) HashTransactions() []byte {
-  var txHashes [][]byte
-  var txHash [32]byte
-  for _, tx := range b.Transactions {
-		txHashes = append(txHashes, tx.ID)
-	}
-	txHash = sha256.Sum256(bytes.Join(txHashes, []byte{}))
+	var transactions [][]byte
 
-	return txHash[:]
+	for _, tx := range b.Transactions {
+		transactions = append(transactions, tx.Serialize())
+	}
+	mTree := merkle.NewMerkleTree(transactions)
+
+	return mTree.RootNode.Data
 }
 
 

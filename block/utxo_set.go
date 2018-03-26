@@ -1,9 +1,10 @@
 package block
 
 import (
-	"log"
-	"github.com/boltdb/bolt"
 	"encoding/hex"
+	"log"
+
+	"github.com/boltdb/bolt"
 )
 
 const utxoBucket = "chainstate"

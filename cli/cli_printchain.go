@@ -11,20 +11,19 @@ func (cli *CLI) printChain() {
 	defer block.Close(bc)
 
 	bci := bc.Iterator()
-
 	for {
-		block := bci.Next()
+		b := bci.Next()
 
-		fmt.Printf("============ Block %x ============\n", block.Hash)
-		fmt.Printf("Prev. block: %x\n", block.PrevBlockHash)
-
-		fmt.Printf("PoW: %s\n\n", strconv.FormatBool(block.Validate()))
-		for _, tx := range block.Transactions {
+		fmt.Printf("============ Block %x ============\n", b.Hash)
+		fmt.Printf("Prev. block: %x\n", b.PrevBlockHash)
+		pow := block.NewProofOfWork(b)
+		fmt.Printf("PoW: %s\n\n", strconv.FormatBool(pow.Validate()))
+		for _, tx := range b.Transactions {
 			fmt.Println(tx)
 		}
 		fmt.Printf("\n\n")
 
-		if len(block.PrevBlockHash) == 0 {
+		if len(b.PrevBlockHash) == 0 {
 			break
 		}
 	}

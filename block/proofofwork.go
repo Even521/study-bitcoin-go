@@ -12,7 +12,7 @@ import (
 var (
 	maxNonce = math.MaxInt64
 )
-const targetBits = 20
+const targetBits = 10 //目标难度
 
 //工作量证明
 type ProofOfWork struct {
@@ -54,7 +54,7 @@ func (pow *ProofOfWork) Run() (int, []byte) {
 	var hash [32]byte
 	nonce := 0
 
-	fmt.Printf(" Mining the block containing \"%s\"\n", pow.block.HashTransactions())
+	fmt.Printf("Mining a new block")
 	for nonce < maxNonce {
 		data := pow.prepareData(nonce)
 		hash = sha256.Sum256(data)

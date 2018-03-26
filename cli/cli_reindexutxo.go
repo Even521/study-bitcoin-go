@@ -3,6 +3,7 @@ package cli
 import (
 	"fmt"
 	"github.com/study-bitcoin-go/block"
+
 )
 
 func (cli *CLI) reindexUTXO() {
