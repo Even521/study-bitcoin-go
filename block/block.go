@@ -48,6 +48,7 @@ func (b *Block) HashTransactions() []byte {
 	for _, tx := range b.Transactions {
 		transactions = append(transactions, tx.Serialize())
 	}
+	//梅克尔树算法得到根节点数据
 	mTree := merkle.NewMerkleTree(transactions)
 
 	return mTree.RootNode.Data

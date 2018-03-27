@@ -13,8 +13,8 @@ type CLI struct{}
 //启动接口函数
 func Start()interface{}  {
 	cl := CLI{}
-	cl.send("1GJRuoix1mQmjr8SxA5zv7YS4ShMWRv1NM","1LmbXS8h17cditeLfH9YjsMHPEy5nZPNiN",2)
-	//cl.Run()//执行命令方法
+	//cl.send("1GJRuoix1mQmjr8SxA5zv7YS4ShMWRv1NM","1LmbXS8h17cditeLfH9YjsMHPEy5nZPNiN",2)
+	cl.Run()//执行命令方法
 	return  nil
 }
 
